@@ -1,0 +1,77 @@
+parameters:
+    redis_host: '127.0.0.1'
+    redis_port: '6379'
+    redis_ttl: 604800
+    memcached_connection: 'memcached://127.0.0.1:11211'
+    locale: 'en'
+    knowledge_base_socket_connection: 'tcp://172.18.0.10:3317'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    virtual_property.author:
+        alias: App\Service\AuthorVirtualPropertyGetterService
+        public: true
+    virtual_property.application:
+        alias: App\Service\ApplicationVirtualPropertyGetterService
+        public: true
+
+    App\Service\SearchService:
+        public: true
+    App\Service\ReportService:
+        public: true
+    App\Event\ArticleSearchEvent:
+        autowire: false
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Response,Kernel.php}'
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: ['controller.service_arguments']
+    App\EventListener\ApiExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: -257 }
+    App\EventListener\SiteExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, priority: -256 }
+    App\EventListener\SlugGeneratorListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist }
+    App\EventListener\PositionSetterListener:
+        tags:
+            - { name: doctrine.orm.entity_listener, event: prePersist }
+
+    jms_serializer.naming_strategy:
+        alias: jms_serializer.identical_property_naming_strategy
+
+    Helpcrunch\Service\:
+        resource: '../vendor/helpcrunch/helpcrunch-symfony/src/Service/'
+    Helpcrunch\EventSubscriber\:
+        resource: '../vendor/helpcrunch/helpcrunch-symfony/src/EventSubscriber/'
+    Helpcrunch\Service\TokenValidationService:
+        public: true
+    Helpcrunch\Service\TokenAuthServiceFactory:
+        public: true
+    Helpcrunch\Service\TokenAuthService\AutoLoginAuthService:
+        public: true
+    Helpcrunch\Service\TokenAuthService\DeviceAuthService:
+        public: true
+    Helpcrunch\Service\TokenAuthService\MobileUserAuthService:
+        public: true
+    Helpcrunch\Service\TokenAuthService\OrganizationAuthService:
+        public: true
+    Helpcrunch\Service\TokenAuthService\UserAuthService:
+        public: true
+    Helpcrunch\Service\TokenAuthService\InternalAppAuthService:
+        public: true
+    Helpcrunch\Service\RequestService\ApiRequestService:
+        public: true
+        arguments: ['%env(API_SCHEMA)%', '%env(API_DOMAIN)%', '@Helpcrunch\Service\TokenAuthService\InternalAppAuthService']
+    Helpcrunch\Service\MemcachedService:
+        public: true
+        arguments: ['%memcached_connection%']
+    Helpcrunch\Service\RedisService:
+        public: true

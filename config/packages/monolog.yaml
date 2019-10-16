@@ -1,0 +1,5 @@
+monolog:
+  handlers:
+    file:
+      type: stream
+      level: warning

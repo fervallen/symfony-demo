@@ -1,0 +1,14 @@
+search:
+    path: /api/search
+    controller: App\Controller\Api\SearchController::searchAction
+    methods: [GET]
+
+article:
+    prefix: /api
+    type: rest
+    resource: App\Controller\Api\ArticleController
+
+site_routes:
+    resource: '../src/Controller/Site'
+    type: 'annotation'
+    trailing_slash_on_root: false

@@ -1,0 +1,12 @@
+framework:
+    cache:
+        app: cache.adapter.memcached
+        default_memcached_provider: "memcached://127.0.0.1:11211"
+    php_errors:
+        log: true
+    secret: '%env(APP_SECRET)%'
+    session:
+        handler_id: ~
+    templating:
+        engines: ['php']
+    validation: { enable_annotations: true }

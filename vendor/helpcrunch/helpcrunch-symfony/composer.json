@@ -1,0 +1,21 @@
+{
+  "name": "helpcrunch/helpcrunch-symfony",
+  "version": "dev-master",
+  "require": {
+    "doctrine/doctrine-bundle": "*",
+    "doctrine/orm": "*",
+    "doctrine/persistence": "*",
+    "ext-json": "*",
+    "ext-zmq": "*",
+    "ext-redis": "*",
+    "ext-memcached": "*",
+    "friendsofsymfony/rest-bundle": "^2.3",
+    "jms/serializer": "*",
+    "php": ">=7.2",
+    "sentry/sentry": "^1.8",
+    "symfony/form": "*",
+    "symfony/validator": "*",
+    "guzzlehttp/guzzle": "^6.3",
+    "mobiledetect/mobiledetectlib": "^2.8"
+  }
+}
